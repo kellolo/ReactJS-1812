@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom'
 import Message from '../Message/Message.jsx'
 
 import { TextField, FloatingActionButton } from 'material-ui';
+import CircularProgress from 'material-ui/CircularProgress';
 import SendIcon from 'material-ui/svg-icons/content/send';
 
 //store
@@ -14,9 +15,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 class Messages extends React.Component {
+    
     constructor (props) {
         super (props)
-
         this.state = {
 
             input: ''
@@ -47,6 +48,38 @@ class Messages extends React.Component {
         }
     }
 
+    // async function loadMessages() {
+    //     let response = await fetch('api/messages.json')
+    //     let body = await response.json()
+    //     let messages = await body.messages
+    //     return messages
+    //   }
+      
+
+    componentDidMount() {
+
+        fetch('/api/messages1.json')
+        .then(body => body.json())
+        //.then(body => console.log(body.messages[0]))
+        .then(body =>{
+            let messages = body.messages
+            //Для теста
+            console.log(messages) //показывает что api работает
+
+            let id = 20
+            let text = "Привет!"
+            let sender = "Test"
+            let chatId = 1
+            this.props.sendMessage(id,text,sender, chatId) //показывает что эта функция работает
+            body.messages.forEach(msg =>{
+                this.props.sendMessage(msg.id, msg.text,msg.sender, msg.chatId) // Вот тут как раз и не работает: [Error] Unhandled Promise Rejection: TypeError: undefined is not an object (evaluating 'value[k]')  update (index.js:98)  update (index.js:98)  update (index.js:98)  combination (redux.js:470)  dispatch (redux.js:223)  (anonymous function) (MessageField.jsx:129)  forEach  (anonymous function) (MessageField.jsx:128)  promiseReactionJob
+            })
+
+        })
+
+     }
+  
+ 
 
     // sendMessage = () => {
     //     this.setState ({
@@ -66,17 +99,17 @@ class Messages extends React.Component {
     }
 
     render () {
+
         let { user } = this.props
         //let { messages } = this.state
         let { chatId } = this.props
         let { chats } = this.props
         let { messages } = this.props
-
-
         let MessageArr = messages[chatId].messagesList.map (message => <Message msg={ {
             usrName: message.author ? message.author : user, 
             msgBody: message.body
         } }/>)
+        
         //console.log(chats[chatId])
 
         return (
@@ -107,7 +140,7 @@ class Messages extends React.Component {
 }
 
 let mapStateToProps = ({ messagesReducer }) => ({
-    messages: messagesReducer.messages
+    messages: messagesReducer.messages,
 })
 
 let mapDispatchToProps = dispatch => bindActionCreators ({ sendMessage }, dispatch)

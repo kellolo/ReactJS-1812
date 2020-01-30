@@ -4,6 +4,9 @@ import update from 'react-addons-update'
 //actions
 import { SEND_MESSAGE } from '../actions/message_actions'
 
+
+
+
 let initialStore = {
   messages: {
     1: {
