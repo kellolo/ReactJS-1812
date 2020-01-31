@@ -11,6 +11,7 @@
 .chatBody {
     padding: 10px;
     height: 700px;
+	overflow-y: scroll;
 }
 .chatSendArea {
     background-color: lightskyblue;
@@ -21,9 +22,6 @@
     resize: none;
     border: none;
 }
-.chatSendButton {
-    /* padding-left: 200px; */
-}
 .message-left {
     text-align: left;
     color: darkslategray;
@@ -31,7 +29,4 @@
 .message-right {
     text-align: right;
     color: darkolivegreen;
-}
-.sendIcon {
-    /* border: 1px solid grey; */
 }

@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+main {
+    scroll-behavior: auto;
+}
+
+
+.msg-wrapper-head {
+    font-family: 'Roboto', sans-serif;
+    font-size: 30px;
+    font-weight: 200;
+    background-color: rgb(148, 190, 206);
+    padding: 15px 0;
+    margin: auto;
+}
+
+.msg-wrapper {
+    display: flex;
+    background-color: rgb(148, 190, 206);
+}
+
+.head-btn {
+    border: none;
+    color: black;
+    font-family: 'Roboto', sans-serif;
+    font-size: 30px;
+    font-weight: 200;
+    margin: 10px 0 0 10px;
+    background-color: rgb(148, 190, 206);
+    position: absolute;
+}
+
+.chat-texts {
+    padding: 20px 10px 0 10px;
+    /* color: white; */
+    text-align: left;
+    vertical-align: text-bottom;
+    height: 360px;
+    align-content: flex-end;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+.btn-send-msg {
+    bottom: 0;
+    color: white;
+    background-color: darkgray;
+    padding: 10px;
+    border: none;
+    width: 50px;
+}
+
+.type-bottom {
+    display: flex;
+    align-items: flex-end;
+    bottom: 0;
+    margin-bottom: 0;
+}
+
+.type-input {
+    width: 360px;
+    bottom: 0em;
+    background-color: darkgray;
+    color: white;
+    vertical-align: baseline;
+    resize: none;
+    margin-bottom: 0;
+    margin-block-end: 0;
+    border-right: 1px solid black;
+}
+
+.text-field-full {
+    width: 100%;
+}

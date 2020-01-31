@@ -13,9 +13,7 @@ module.exports = {
         contentBase: path.join(__dirname, './'),
         compress: true,
         port: 8080,
-        historyApiFallback: {
-            index: 'index.html'
-        }
+        historyApiFallback: true,
     },
     devtool: 'cheap-inline-module-source-map',
     module: {

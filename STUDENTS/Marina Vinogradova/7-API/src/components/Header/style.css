@@ -1,0 +1,12 @@
+header {
+    width: 100%;
+}
+
+.head-chat-list {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex {
+    display: flex;
+}

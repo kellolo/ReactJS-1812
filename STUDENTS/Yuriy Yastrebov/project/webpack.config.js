@@ -10,9 +10,12 @@ module.exports = {
   },
   mode: 'development',
   devServer: {
-    contentBase: './dist',
+    //contentBase: './dist',
     port: 3000,
-    hot: true
+    hot: true,
+    historyApiFallback: {
+      index: 'index.html'
+    }
   },
   module: {
     rules: [

@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from "redux";
-import connect from 'react-redux/es/connect/connect';
 import { TextField, FloatingActionButton } from 'material-ui';
+import CircularProgress from 'material-ui/CircularProgress';
+import { sendMessage, loadMessages } from '../../actions/messageActions';
 import SendIcon from 'material-ui/svg-icons/content/send';
 import Message from '../Message/Message.jsx';
 import './style.css';
+
+//redux
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
 
 class MessageField extends React.Component {
     static propTypes = {
@@ -13,10 +17,15 @@ class MessageField extends React.Component {
         messages: PropTypes.object.isRequired,
         chats: PropTypes.object.isRequired,
         sendMessage: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool.isRequired
     };
 
     state = {
-        input: '',
+        input: ''
+    };
+
+    componentDidMount() {
+        this.props.loadMessages();
     };
 
     // randomBot() {
@@ -34,7 +43,7 @@ class MessageField extends React.Component {
         };
         if(sender === 'user') {
             this.setState({ input: '' });
-        };
+        }
     };
 
     handleChange = (event) => {
@@ -47,16 +56,31 @@ class MessageField extends React.Component {
         }
     };
 
+    componentDidMount() {
+        let url = 'https://raw.githubusercontent.com/Jestric-sys/js-data-bot/master/messages.json'
+        fetch(url)
+            .then(body => body.json())
+            .then(json => {
+                json.forEach(msg => {
+                    this.props.sendMessage(msg.id, msg.text, msg.sender, msg.chatId);
+                });
+            })
+    };
+
     render() {
+        if(this.props.isLoading) {
+            return <CircularProgress />
+        };
+
         const { chatId, messages, chats } = this.props;
-        const messageElements = chats[chatId].messageList.map(messageId => (
-            <Message
-                key={ messageId }
+        const messageElements = chats[chatId].messageList.map((messageId, index) => (
+            <Message 
+                key={ index }
                 text={ messages[messageId].text }
                 sender={ messages[messageId].sender }
             />
         ));
-        
+
         return <div className="message-head">
             <div key="messageElements" className="message-field">
                 { messageElements }
@@ -79,12 +103,13 @@ class MessageField extends React.Component {
             </div>
         </div>
     }
-}
+};
 
-const mapStateToProps = ({ chatReducer }) => ({
+const mapStateToProps = ({ chatReducer, messageReducer }) => ({
     chats: chatReducer.chats,
+    messages: messageReducer.messages,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage, loadMessages }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);

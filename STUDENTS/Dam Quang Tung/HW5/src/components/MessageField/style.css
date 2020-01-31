@@ -1,0 +1,8 @@
+.msg-field {
+    display: flex;
+    flex-direction: column;
+    background-color: #e2e2e2;
+    height: 50%;
+    padding: 20px;
+    overflow-y: scroll;
+}

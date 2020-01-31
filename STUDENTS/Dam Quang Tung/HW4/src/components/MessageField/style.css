@@ -1,0 +1,21 @@
+.inputField {
+  width: 200px;
+}
+
+.textinput-line {
+  padding: 10px 0 0 0;
+  position: absolute;
+  bottom: 0;
+  width: 70%;
+  height: 10vh;
+  background-color: lightblue;
+}
+
+.right {
+  text-align: right;
+}
+
+.message-field {
+  overflow: scroll;
+  max-height: 550px;
+}
