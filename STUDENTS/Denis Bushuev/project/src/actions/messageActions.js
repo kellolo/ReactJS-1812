@@ -16,15 +16,14 @@ export const ERROR_MESSAGES_LOADING = '@@message/ERROR_MESSAGES_LOADING';
 
 export const loadMessages = () => ({
     [RSAA]: {
-        endpoint: 'https://raw.githubusercontent.com/Jestric-sys/js-data-bot/master/messages.json',
+        endpoint: '/api/messages.json',
         method: 'GET',
         types: [
             START_MESSAGES_LOADING,
             {
                 type: SUCCESS_MESSAGES_LOADING,
-                payload: (action, state, res) => getJSON(res).then(
-                    json => json,
-                ),
+                payload: (action, state, res) => getJSON(res)
+                    .then(json => json),
             },
             ERROR_MESSAGES_LOADING,
         ],

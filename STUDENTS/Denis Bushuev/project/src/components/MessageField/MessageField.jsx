@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TextField, FloatingActionButton } from 'material-ui';
-import CircularProgress from 'material-ui/CircularProgress';
-import { sendMessage, loadMessages } from '../../actions/messageActions';
 import SendIcon from 'material-ui/svg-icons/content/send';
 import Message from '../Message/Message.jsx';
 import './style.css';
@@ -11,21 +9,22 @@ import './style.css';
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
 
+//api
+import CircularProgress from 'material-ui/CircularProgress';
+import { sendMessage } from '../../actions/messageActions';
+import { loadChats } from '../../actions/chatActions';
+
 class MessageField extends React.Component {
     static propTypes = {
         chatId: PropTypes.number.isRequired,
         messages: PropTypes.object.isRequired,
         chats: PropTypes.object.isRequired,
         sendMessage: PropTypes.func.isRequired,
-        isLoading: PropTypes.bool.isRequired
+        isLoading: PropTypes.bool.isRequired,
     };
 
     state = {
         input: ''
-    };
-
-    componentDidMount() {
-        this.props.loadMessages();
     };
 
     // randomBot() {
@@ -57,14 +56,7 @@ class MessageField extends React.Component {
     };
 
     componentDidMount() {
-        let url = 'https://raw.githubusercontent.com/Jestric-sys/js-data-bot/master/messages.json'
-        fetch(url)
-            .then(body => body.json())
-            .then(json => {
-                json.forEach(msg => {
-                    this.props.sendMessage(msg.id, msg.text, msg.sender, msg.chatId);
-                });
-            })
+        this.props.loadChats();
     };
 
     render() {
@@ -108,8 +100,9 @@ class MessageField extends React.Component {
 const mapStateToProps = ({ chatReducer, messageReducer }) => ({
     chats: chatReducer.chats,
     messages: messageReducer.messages,
+    isLoading: messageReducer.isLoading,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage, loadMessages }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage, loadChats }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);
