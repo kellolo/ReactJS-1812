@@ -1,0 +1,34 @@
+.msg-cloud {
+    background-color: lightblue;
+    padding: 5px;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 10px 0;
+ 
+}
+
+.bot-cloud-msg {
+    background-color: lightgreen;  
+    padding: 5px;
+    border-radius: 10px;
+    display: inline-block;
+    text-align: right;
+    margin: 10px 0;
+
+}
+
+.msg-cloud p {
+    line-height: 30px;
+    padding: 0;
+    margin: 0;
+}
+
+.msg-right {
+    text-align: right;
+    bottom: 0;
+}
+
+.msg-left {
+    text-align: left;
+    bottom: 0;
+}

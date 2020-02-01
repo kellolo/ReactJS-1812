@@ -1,0 +1,29 @@
+.chanel-link {
+    text-decoration: none;
+}
+
+.chanel {
+    cursor: pointer;
+}
+
+.chanel:hover {
+    color: white;
+    background-color: grey;
+}
+
+.ch-animated {
+    animation-duration: 1s;
+    animation-name: message;
+}
+
+@keyframes message {
+    from {
+        background-color: white;
+    }
+    to {
+        background-color: white;
+    }
+    50% {
+        background-color: #3f51b5;
+    }
+}

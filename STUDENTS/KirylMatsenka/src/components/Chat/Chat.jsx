@@ -5,13 +5,9 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
 
 export default class Chat extends Component {
-    constructor (props) {
-        super (props)
-    }
-
     render () {
         return (
-            <ListItem button>
+            <ListItem button onClick = { this.props.handleNavigate }>
                 <ListItemAvatar>
                   <Avatar alt="Profile Picture" />
                 </ListItemAvatar>

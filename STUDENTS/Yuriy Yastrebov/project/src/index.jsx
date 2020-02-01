@@ -1,15 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {ConnectedRouter} from 'connected-react-router'
 import Router from './components/Router.jsx'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './style.css'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import {PersistGate} from 'redux-persist/integration/react'
 
 // redux
 import initStore, {history} from './store.js'
 import {Provider} from 'react-redux'
+import {ConnectedRouter} from 'connected-react-router'
+import {PersistGate} from 'redux-persist/integration/react'
 
 let {store, persistor} = initStore()
 

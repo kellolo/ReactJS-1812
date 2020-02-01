@@ -7,7 +7,6 @@ import Fab from '@material-ui/core/Fab'
 import Box from '@material-ui/core/Box'
 import ScrollBottom from './ScrollBottom.jsx'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import Robot from '../Robot/Robot.js'
 
 import { sendMessage } from '../../actions/message_actions.js'
 import { connect } from 'react-redux'
@@ -21,23 +20,24 @@ class Messages extends Component {
             messageInput: '',
             valid: true,
             scrollElement: null,
-            timeOuts: null,
-            rob: new Robot (),
+            messages: null
+        }
+    }
+
+    async componentWillMount () {
+        try {
+            await fetch ('https://raw.githubusercontent.com/KirylJazzSax/api/master/messages.json')
+            .then (data => data.json ())
+            .then (json => {
+                this.setState ({ messages: json })
+            })
+        } 
+        finally {
+            console.log ('Messages loaded')
         }
     }
 
     componentDidMount () {
-        // Привет от робота
-        if (Object.keys (this.props.chats[this.props.chat]).length === 0) {
-            let hiFromRobot = setTimeout (() => {
-                this.props.sendMessage (this.state.rob.hello.body, this.state.rob.hello.user, this.props.chat)
-            }, 3000)
-            this.setState ({
-                scrollElement: document.querySelector ('#messages'),
-                timeOuts: hiFromRobot,
-            })
-        }
-        
         // Это поле диалога
         this.setState ({
             scrollElement: document.querySelector ('#messages'),
@@ -45,21 +45,6 @@ class Messages extends Component {
     }
 
     componentDidUpdate () {
-        let messages = this.props.chats[this.props.chat].messages
-
-        let answerMessage = window.setTimeout (() => {
-            let answer = Object.keys (messages).length > 0 ? this.state.rob.answer (this.props.chats[this.props.chat].messages) : this.state.rob.hello
-            this.props.sendMessage (answer.body, answer.user, this.props.chat)
-        }, 3000)
-
-        if (messages[Object.keys (messages).length] && messages[Object.keys (messages).length].user == 'Rob') {
-            while (answerMessage > this.state.timeOuts) {
-                window.clearTimeout (answerMessage)
-                answerMessage-- 
-            }
-        } else {
-            answerMessage
-        }
         // Scroll down automatically    
         if (this.getLastMessageInField ()) {
             this.getLastMessageInField ().scrollIntoView ({ behavior: 'smooth', block: 'center' })
@@ -90,17 +75,21 @@ class Messages extends Component {
     }
 
     render () {
-        let m = this.props.chats[this.props.chat].messages
-        let messages = Object.keys (m).map (id => 
-        <Box
-            key={ id } 
-            display="flex" 
-            justifyContent={ m[id].user == this.props.user.name ? "flex-end" : "flex-start" }
-            m={2}
-        >
-            <Message msg={ m[id] } user={ this.props.user }/>
-        </Box>
-        )
+        let messages
+        if (this.state.messages !== null) {
+            let m = this.state.messages[this.props.chat]
+            messages = Object.keys (m).map (id => 
+            <Box
+                key={ id } 
+                display="flex" 
+                justifyContent={ m[id].user == this.props.user.name ? "flex-end" : "flex-start" }
+                m={2}
+            >
+                <Message msg={ m[id] } user={ this.props.user }/>
+            </Box>
+            )
+        }
+        
     
         return (
             <Grid container item xs={9} alignContent={'flex-end'}>
@@ -146,9 +135,10 @@ class Messages extends Component {
     }
 }
 
-let mapStateToProps = ({ chatReducer }) => ({
+let mapStateToProps = ({ chatReducer, messageReducer }) => ({
     chats: chatReducer.chats,
-    user: chatReducer.user
+    user: chatReducer.user,
+    messages: messageReducer.messages
 })
 
 let mapDispatchToProps = dispatch => bindActionCreators ({ sendMessage }, dispatch)

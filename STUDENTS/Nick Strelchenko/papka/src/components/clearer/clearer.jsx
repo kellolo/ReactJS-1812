@@ -4,6 +4,7 @@ import {bindActionCreators} from "redux";
 import {clearAll} from '../../actions/clearAll'
 import { connect } from 'react-redux';
 class Clearer extends React.Component{
+    
     onClearClick = (e)=>{
         e.preventDefault()
         localStorage.clear()
@@ -11,9 +12,13 @@ class Clearer extends React.Component{
     }
     render(){
         return(
-            <Button variant="danger"className="mr-2 ml-2" onClick={this.onClearClick}>
+            <React.Fragment>
+                <Button variant="danger"className="mr-2 ml-2" onClick={this.onClearClick}>
                 Очистить чат
-            </Button>
+                </Button>
+                
+            </React.Fragment>
+            
         )
     }
 }
