@@ -5,7 +5,7 @@ import Message from '../Message/Message.jsx'
 import { TextField } from 'material-ui';
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/es/connect/connect';
-import { sendMessage } from '../actions/message_actions.js'
+import { sendMessage } from '../../actions/message_actions.js'
 
 
 class Messages extends React.Component {

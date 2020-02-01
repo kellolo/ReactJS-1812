@@ -10,8 +10,8 @@ module.exports = {
     },
     mode: 'development',
     devServer: {
-        contentBase: './dist',
-        port: 3000,
+        //contentBase: './dist',
+        port: 4000,
         hot: true,
         historyApiFallback: {
             index: './src/index.html'
