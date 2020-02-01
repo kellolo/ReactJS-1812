@@ -1,15 +1,16 @@
 import update from 'react-addons-update'
 import { ADD_CHAT } from '../actions/chat_actions.js'
-import { SEND_MESSAGE } from '../actions/message_actions.js'
 
 let initialStore = {
-    chats: {
-        1: {title: 'Chat 1', messages: {}},
-        2: {title: 'Chat 2', messages: {}},
-        3: {title: 'Chat 3', messages: {}}
-    },
-    user: { id: 1, name: 'Вася' }
+    chats: {},
+    user: null
 }
+
+// Это наверное не катит никак?
+fetch ('https://raw.githubusercontent.com/KirylJazzSax/api/master/users.json')
+.then (data => data.json ())
+.then (user => initialStore.chats.user = user) 
+
 
 export default function chatReducer (store = initialStore, action) {
     switch (action.type) {
@@ -20,25 +21,6 @@ export default function chatReducer (store = initialStore, action) {
                     $merge: {
                         [id]: {
                             title: `Chat ${id}`,
-                            messages: {} 
-                        }
-                    }
-                }
-            })
-        }
-        case SEND_MESSAGE: {
-            let id = Object.keys (store.chats[action.chat].messages).length + 1
-            return update (store, {
-                chats: {
-                    $merge: {
-                        [action.chat]: {
-                            title: store.chats[action.chat].title,
-                            messages: {...store.chats[action.chat].messages,
-                                [id]: {
-                                    body: action.message,
-                                    user: action.user
-                                }
-                            }
                         }
                     }
                 }

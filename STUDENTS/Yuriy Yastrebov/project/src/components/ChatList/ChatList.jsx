@@ -1,15 +1,16 @@
-import './style.css'
 import React, {Component} from 'react'
 import {push} from 'connected-react-router'
 import {List, ListItem} from 'material-ui/List'
-import AddIcon from 'material-ui/svg-icons/content/add'
+
 import {TextField} from 'material-ui'
 import ContentSend from 'material-ui/svg-icons/content/send'
 import PropTypes from 'prop-types'
+import AddIcon from 'material-ui/svg-icons/content/add'
+import './style.css'
 
-import {addChat} from '../../actions/chat_actions.js'
-import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
+import connect from 'react-redux/es/connect/connect'
+import {addChat} from '../../actions/chat_actions.js'
 
 class ChatList extends Component {
     static propTypes = {
@@ -44,13 +45,13 @@ class ChatList extends Component {
     }
 
     render () {
-	    let {chats} = this.props
+    	let {chats} = this.props
         let chatsArr = Object.keys(chats).map(chatId => (
-            <ListItem>
+            <ListItem
                 key = {chatId}
                 primaryText = {chats[chatId].title}
                 leftIcon = {<ContentSend />}
-                onClick = {() => this.handleNavigate(`/chat/${chatId}`)}
+                onClick = {() => this.handleNavigate(`/chat/${chatId}`)}>
             </ListItem>
         ))
         return (
@@ -60,7 +61,7 @@ class ChatList extends Component {
                    key="Добавить новый чат"
                    leftIcon={<AddIcon />}
                    onClick={this.handleAddChat}
-                   style={{height: '60px'}}
+		   className="addChat"
                    children= {<TextField
                        key="textField"
                        fullWidth
@@ -70,14 +71,14 @@ class ChatList extends Component {
                        value={this.state.input}
                        onKeyUp={this.handleKeyUp}
                    />}
-               />
+                />   
             </List>
         )
     }
 }
 
 let mapStateToProps = ({chatReducer}) => ({
-    chats: chatReducer.chats
+    chats: chatReducer.chats,
 })
 
 let mapDispatchToProps = dispatch => bindActionCreators ({addChat, push}, dispatch)

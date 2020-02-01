@@ -1,52 +1,52 @@
 import React from 'react'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
+
 import { connect } from 'react-redux';
-import chatReducer from '../../reducers/chatReducer'
+
+
+
+
 
 
 class Message extends React.Component{
     
     render(){
-       
-        const currentChat = this.props.state.chatReducer.chats[this.props.chatId-0].messageList
-        const ListOfMsg = ()=>{
-            const lstofmsgs = currentChat.map((item)=>{
-                
-                if (item.sender==="Robot"){
-                    return(
+        
+        const { chatId }=this.props
+        const {chats}=this.props.state.chatReducer
+        
+        const listOfMessages = chats[chatId].messageList.map((message)=>{
+            const {text,sender}=message
+            if (sender==="Robot"){
+                return(
+                    
+                    <div className="d-flex justify-content-end m-3 text-white">
                         
-                        <div className="d-flex justify-content-end m-3 text-white">
-                            <div className='w-25 bg-info'style={{borderRadius:"10px",}}>
-                                    <h4 style={{borderBottom:"1px dotted white"}}>{item.sender}</h4>
-                                    <p>{item.text}</p>
-                            </div>
+                        <div className='w-25 bg-info'style={{borderRadius:"10px",}}>
+                                <h4 style={{borderBottom:"1px dotted white"}}>{sender}</h4>
+                                <p>{text}</p>
                         </div>
-                    )
-                }
-                else{
-                    return(
+                    </div>
+                )
+            }
+            else{
+                return(
+                    
+                    <div className="d-flex justify-content-start m-3 text-white">
                         
-                        <div className="d-flex justify-content-start m-3 text-white">
-                            <div className='w-25 bg-success'style={{borderRadius:"10px",}}>
-                                    <h4 style={{borderBottom:"1px dotted white"}}>{item.sender}</h4>
-                                    <p>{item.text}</p>
-                            </div>
-                        </div>    
-                    )
-                }
-            })
-               
-            return lstofmsgs
-        }
+                        <div className='w-25 bg-success'style={{borderRadius:"10px",}}>
+                                <h4 style={{borderBottom:"1px dotted white"}}>{sender}</h4>
+                                <p>{text}</p>
+                        </div>
+                    </div>    
+                )
+            }
+        })
         return(
-            <ListOfMsg className='123'/>
+            <div>{listOfMessages}</div>
         )
     }
 }
+        
 
 const mapStateToProps=(state)=>{
     return ({state})

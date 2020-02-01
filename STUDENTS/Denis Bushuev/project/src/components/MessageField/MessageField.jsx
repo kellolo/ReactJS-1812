@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TextField, FloatingActionButton } from 'material-ui';
+import CircularProgress from 'material-ui/CircularProgress';
+import { sendMessage, loadMessages } from '../../actions/messageActions';
 import SendIcon from 'material-ui/svg-icons/content/send';
 import Message from '../Message/Message.jsx';
 import './style.css';
@@ -15,10 +17,15 @@ class MessageField extends React.Component {
         messages: PropTypes.object.isRequired,
         chats: PropTypes.object.isRequired,
         sendMessage: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool.isRequired
     };
 
     state = {
         input: ''
+    };
+
+    componentDidMount() {
+        this.props.loadMessages();
     };
 
     // randomBot() {
@@ -49,7 +56,22 @@ class MessageField extends React.Component {
         }
     };
 
+    componentDidMount() {
+        let url = 'https://raw.githubusercontent.com/Jestric-sys/js-data-bot/master/messages.json'
+        fetch(url)
+            .then(body => body.json())
+            .then(json => {
+                json.forEach(msg => {
+                    this.props.sendMessage(msg.id, msg.text, msg.sender, msg.chatId);
+                });
+            })
+    };
+
     render() {
+        if(this.props.isLoading) {
+            return <CircularProgress />
+        };
+
         const { chatId, messages, chats } = this.props;
         const messageElements = chats[chatId].messageList.map((messageId, index) => (
             <Message 
@@ -88,6 +110,6 @@ const mapStateToProps = ({ chatReducer, messageReducer }) => ({
     messages: messageReducer.messages,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage, loadMessages }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);

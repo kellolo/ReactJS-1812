@@ -1,19 +1,21 @@
 import React from 'react'
-import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import { connect } from 'react-redux';
-import chatReducer from '../../reducers/chatReducer'
 import Message from '../message'
-import {LinkContainer} from 'react-router-bootstrap'
 import './message-field.css'
 import {bindActionCreators} from "redux";
 import {addMessage} from '../../actions/addMessage'
-import {addChat} from '../../actions/newChat'
+import {loadMessages} from '../../actions/addMessage'
+import {addChat,loadChats} from '../../actions/newChat'
 import { push } from 'connected-react-router';
 import Clearer from '../clearer'
+
+
+
+
 class MessageField extends React.Component{
     state={
         text:null,
@@ -28,17 +30,22 @@ class MessageField extends React.Component{
         e.preventDefault()
         this.props.addChat()
     }
+
+    componentDidMount() {
+        
+        this.props.loadChats()    
+    }
+ 
+
     render(){
-        console.log("local.storage",localStorage)
+        
         const onChangeText=(e)=>{
             const {value}=e.target           
             this.setState({
                 text:value
             })
         }
-        for (let key in this.props.state.chats){
-            
-        }
+        
         const ListOfChats =()=>{
             
             return Object.entries(this.props.state.chatReducer.chats).map(([key,value],i)=>{
@@ -60,8 +67,11 @@ class MessageField extends React.Component{
         const {chatId} = this.props.match.params        
         
         const ChatId = this.props.match.params.chatId
-        return(
-            
+
+        
+        
+            return(
+                
                 <Row style={{height:"80%"}}>
                     <Col lg={3} sm={12} className="d-flex flex-column justify-content-center"style={{borderRight:"2px solid white",height:"100%",color:"white",fontSize:"1.5rem"}}>
                         <ListOfChats/>
@@ -88,6 +98,9 @@ class MessageField extends React.Component{
 
             
         )
+        
+        
+        
     }
 }
 
@@ -95,6 +108,6 @@ const mapStateToProps=(state)=>{
     return ({state})
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({addMessage,push,addChat},dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({addMessage,push,addChat,loadMessages,loadChats},dispatch)
 export default connect(mapStateToProps,mapDispatchToProps)(MessageField)
 

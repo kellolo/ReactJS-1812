@@ -1,7 +1,0 @@
-@mixin opacityBG{
-    background-color: rgba(0,0,0,0.45)!important;
-}
-
-.carousel-caption{
-    @include opacityBG
-}

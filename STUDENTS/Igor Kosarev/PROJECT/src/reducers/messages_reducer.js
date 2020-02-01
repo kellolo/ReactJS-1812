@@ -5,7 +5,7 @@ import update from 'react-addons-update'
 import { SEND_MESSAGE } from '../actions/message_actions'
 
 let initialStore = {
-  chats: {
+  messages: {
     1: {
       messagesList: [
         { body: 'Hello! How are you?', author: "Mary", messageId: 1 },
@@ -36,7 +36,12 @@ let initialStore = {
         { body: 'Drive Tesla!', author: "Ealon", messageId: 3 }
       ]
     }
-  }
+  },
+  roboMessages: [
+    { body: 'Хватит мне писать, я робот', author: "mr. Robo" },
+    { body: 'Я робот, я только говорю что Ваш звонок очень важен для нас и всё!', author: "mr. Robo" },
+    { body: 'Я всё равно ничем не смогу помочь, так как я просто робот', author: "mr. Robo" }
+  ]
 }
 
 export default function messagesReducer(store = initialStore, action) {
@@ -48,7 +53,7 @@ export default function messagesReducer(store = initialStore, action) {
         let chatId = action.chatId
         let obj = { body: action.text, author: action.sender, messageId: Date.now() }
         return update(store, {
-          chats: {
+          messages: {
             [chatId]: {
               messagesList: { $push: [obj] }
             }

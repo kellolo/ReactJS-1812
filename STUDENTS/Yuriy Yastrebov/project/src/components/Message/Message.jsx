@@ -1,18 +1,18 @@
-import './style.css'
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import './style.css'
 
-let msg = (props) => {
-    let senderName = props.sender
-    let text = props.text
-    //let senderType = props.msg.senderType
+export default class Message extends Component {
+    static propTypes = {
+        text: PropTypes.string.isRequired,
+        sender: PropTypes.string.isRequired,
+    };
 
-    return (
-        //<div className={senderType}>
-	<div className="d-flex flex-column">
-            <strong>{senderName}</strong>
-            <p>{text}</p>
-        </div>
-    )
+    render () {
+        return
+            <div className="d-flex flex-column">
+                <strong>{this.props.sender}</strong>
+                <p>{this.props.text}</p>
+            </div>
+    }	
 }
-
-export default msg

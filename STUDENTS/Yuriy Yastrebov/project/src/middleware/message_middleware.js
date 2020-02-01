@@ -1,4 +1,4 @@
-import {SEND_MESSAGE, sendMessage} from '../actions/message_actions.js'
+import {SEND_MESSAGE} from '../actions/message_actions.js'
 
 function getRndAnswer() {
     let robotAnswersArr = ['Можете повторить?', 'Не расслышал', 'Ага, хорошая погода', 'Думаю, что это так', 'Давай поболтаем']
@@ -10,10 +10,9 @@ export default store => next => (action) => {
         case SEND_MESSAGE:
             if (action.sender === 'it') {
                 let msgId = Object.keys(store.getState().messageReducer.messages).length + 1
-                setTimeout(() => {
-                    return store.dispatch(sendMessage(msgId,getRndAnswer(), 'bot', action.chatId))
-                }, 2000)
+                setTimeout(() => store.dispatch(sendMessage(msgId, 'Не приставай ко мне, Я робот!!!', 'bot', action.chatId))
+                , 1000)
             }
-            return next(action)
+        }
+        return next(action)
     }
-}

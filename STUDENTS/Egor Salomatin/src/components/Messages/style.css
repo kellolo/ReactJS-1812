@@ -1,0 +1,18 @@
+.msg-wrapper {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.msg-field {
+    display: flex;
+    flex-direction: column;
+    height: 60vh;
+    overflow-y: auto;
+}
+
+.msg-controls {
+    min-height: 6vh;
+    align-self: center;
+}

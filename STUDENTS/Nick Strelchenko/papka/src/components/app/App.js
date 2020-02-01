@@ -9,15 +9,14 @@ import { ConnectedRouter } from 'connected-react-router';
 import {history} from '../../utils/store'
 import {Provider} from 'react-redux'
 import Container from 'react-bootstrap/Container'
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
+
 
 import { PersistGate } from 'redux-persist/integration/react';
 
 const { store, persistor } = initStore();
 
 function App(props) {
-  console.log(props)
+  
   return (
     <div className="App">
       <Provider store={store}>
@@ -27,6 +26,7 @@ function App(props) {
             <Header />
             <Route path="/chat/:chatId" render={(props)=><MessageField  {...props}/>}/>
             <Redirect from="/" to="/chat/1" />
+            
           </Container>
         </ConnectedRouter>
         </PersistGate>

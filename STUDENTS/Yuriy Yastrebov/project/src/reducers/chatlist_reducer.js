@@ -2,19 +2,35 @@
 import update from 'react-addons-update'
 
 //actions
-import { ADD_CHAT } from '../actions/chat_actions.js'
-import { SEND_MESSAGE } from '../actions/message_actions.js'
+import {SEND_MESSAGE, SUCCESS_MESSAGES_LOADING} from '../actions/message_actions.js'
+import {ADD_CHAT} from '../actions/chat_actions.js'
 
 let initialStore = {
-    chats: {
-        1: {title: 'Чат 1', messageList: []},
-        2: {title: 'Чат 2', messageList: []},
-        3: {title: 'Чат 3', messageList: []},
-    }
+    chats: {},
+    isLoading: true,
 }
 
 export default function chatReducer (store = initialStore, action) {
     switch (action.type) {
+        case SEND_MESSAGE: {
+            return update(store, {
+                chats: {$merge: {[action.chatId]: {
+                    title: store.chats[action.chatId].title,
+                    messageList: [...store.chats[action.chatId].messageList, action.messageId]
+                }}},
+            })
+        }
+        case SUCCESS_MESSAGES_LOADING: {
+            let chats = {...store.chats}
+            action.payload.forEach(msg => {
+                let {id, chatId} = msg
+                chats[chatId].messageList.push(id)
+            })
+            return update(store, {
+                chats: {$set: chats},
+                isLoading: {$set: false},
+            })
+        }
         case ADD_CHAT: {
             // super reducer logic
             let chatId = Object.keys(store.chats).length + 1
@@ -29,15 +45,6 @@ export default function chatReducer (store = initialStore, action) {
                 }
             })
         }
-        case SEND_MESSAGE: {
-            return update(store, {
-                chats: {$merge: {[action.chatId]: {
-                    title: store.chats[action.chatId].title,
-                    messageList: [...store.chats[action.chatId].messageList, action.messageId]
-                } } },
-            })
-        }
-         
         default: {
             return store
         }

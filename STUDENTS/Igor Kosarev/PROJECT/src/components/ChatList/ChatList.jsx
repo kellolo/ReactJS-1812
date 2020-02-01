@@ -4,6 +4,7 @@ import { List, ListItem } from 'material-ui/List';
 import AddIcon from 'material-ui/svg-icons/content/add'
 import { TextField } from 'material-ui'
 import ContentSend from 'material-ui/svg-icons/content/send';
+import './style.css';
 
 //store
 import { addChat } from '../../actions/chat_actions.js'
@@ -35,8 +36,8 @@ class ChatList extends React.Component {
     render() {
         let { chats } = this.props
         let chatsArr = Object.keys(chats).map(chatId => (
-            <Link to = { `/chat/${ chatId }` } key = { chatId }>
-                <ListItem primaryText = { chats[chatId].title } leftIcon={<ContentSend />} />
+            <Link  to = { `/chat/${ chatId }` } key = { chatId }>
+                <ListItem id={`chat-${ chatId }`} primaryText = { chats[chatId].title } leftIcon={<ContentSend />} />
             </Link>
         ))
 

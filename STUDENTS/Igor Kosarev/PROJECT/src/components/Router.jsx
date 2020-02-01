@@ -25,12 +25,6 @@ export default class Router extends React.Component {
                      <Route exact path = '/chat/5/' render = { 
                         () => <Layout chatId = { 5 } />
                      }/>
-                     <Route exact path = '/chat/6/' render = { 
-                        () => <Layout chatId = { 6 } />
-                     }/>
-                    {/* <Route exact path = {`/chat/:chatId`} render = { 
-                        () => <Layout chatId = { chatId } />
-                     }/>     */}
                 </Switch>
             //</Provider>
         )
