@@ -1,115 +1,133 @@
-// import './style.css'
-
-import React, {Component} from 'react'
-import ReactDOM from 'react-dom'
-
-import Message from '../Message/Message.jsx'
-
+import React from 'react';
+import PropTypes from "prop-types";
+import { bindActionCreators } from "redux";
+import connect from "react-redux/es/connect/connect";
 import { TextField, FloatingActionButton } from 'material-ui';
 import SendIcon from 'material-ui/svg-icons/content/send';
+import Message from '../Message/Message.jsx';
+import { sendMessage } from '../../actions/message_actions.js';
+import './style.css';
 
-//store
-import { sendMessage } from '../../actions/message_actions.js'
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+// 1) Callback + XMLHTTPRequest ()
+// 2) Promise (XMLHTTPRequest (url, {}))
+        // .then ((dataFromUrl === resp) => {parse})
+        // .then ((parsedData) => {//do smth})
+    // 2.5
+    // fetch (url, {post//put...}) //вы получите дату (в любом формате)
+    //    .then ((data from url) => data.json () /// data.blob () /// data.text()) //возвращает спарсенные данные
+    //    .tehen (parsedData => {
+            //do smth with parsed data
+    // })
+//  3)  async ... await
 
-class Messages extends React.Component {
-    constructor (props) {
-        super (props)
 
-        this.state = {
+class MessageField extends React.Component {
+    static propTypes = {
+       chatId: PropTypes.number.isRequired,
+       messages: PropTypes.object.isRequired,
+       chats: PropTypes.object.isRequired,
+       sendMessage: PropTypes.func.isRequired,
+    };
 
-            input: ''
-        }
+    state = {
+        input: '',
+    };
+
+    componentDidMount () {
+        let a
+        let url = '/API/messages.json'
+        // fetch ('https://jsonplaceholder.typicode.com/users')
+        fetch (url)
+            .then (d => d.json ())
+            .then (data => {
+                a = data
+            })
+            .finally (() => {
+                console.log (a.length ? a : 'Не удалось получить данные')
+            })
     }
 
-    // componentDidUpdate () {
-    //     let msgs = this.state.messages
-    //     if (msgs.length % 2 === 1) {
-    //         setTimeout (() => {
-    //             this.setState (
-    //                 {
-    //                     messages: [...this.state.messages, {body: 'Ваш звонок очень важен для нас', author: 'mr. Robo'}]
-    //                 }
-    //             )
-    //         }, 1000)
+    //  async componentDidMount () {
+    //     await this.getData ()
+    // }
+
+    // getData = async () => {
+    //     let a
+    //     try {
+    //         await fetch ('https://jsonplaceholder.typicode.com/users')
+    //                 .then (d => d.json ())
+    //                 .then (data => {
+    //                     a = data
+    //                 })
+    //     }
+    //     finally {
+    //         console.log (a.length ? a : 'Не удалось получить данные')
     //     }
     // }
 
-    textInput = React.createRef();
+    sendMessage = (message, sender) => {
+       const { chatId, messages } = this.props;
+       const messageId = Object.keys(messages).length + 1;
+       this.props.sendMessage(messageId, message, sender, chatId);
+    };
 
+    handleChange = (event) => {
+        this.setState({ [event.target.name]: event.target.value });
+    };
 
-    handleSendMessage = () => {
-        let { chatId } = this.props
-        if (this.state.input.length > 0) {
-            this.props.sendMessage(Date.now(), this.state.input, "You", chatId);
-            this.setState({ input: '' });
+    handleKeyUp = (event, message) => {
+        if (event.keyCode === 13) { // Enter
+            this.handleSendMessage(message, 'it')
         }
-    }
+    };
 
+    handleSendMessage = (message, sender) => {
+       if (message.length > 0 || sender === 'bot') {
+           this.sendMessage(message, sender);
+       }
+       if (sender === 'it') {
+           this.setState({ input: '' })
+       }
+    };
 
-    // sendMessage = () => {
-    //     this.setState ({
-    //         messages: [...this.state.messages, {body: this.state.input}],
-    //         input: ''
-    //     })
-    // }
+    render() {
+        const { chatId, chats, messages } = this.props;
+        console.log (messages)
+        const messageElements = chats[chatId].messageList.map(messageId => (
+            <Message
+                key={ messageId }
+                text={ messages[messageId].text }
+                sender={ messages[messageId].sender }
+            />
+        ));
 
-    handleInput = (e) => {
-        this.setState({ input: e.target.value })
-    }
-
-    handleKeyUp = (e) => {
-        if (e.keyCode === 13) {  // Enter
-            this.handleSendMessage()
-        }
-    }
-
-    render () {
-        let { user } = this.props
-        //let { messages } = this.state
-        let { chatId } = this.props
-        let { chats } = this.props
-        let { messages } = this.props
-
-
-        let MessageArr = messages[chatId].messagesList.map (message => <Message msg={ {
-            usrName: message.author ? message.author : user, 
-            msgBody: message.body
-        } }/>)
-        //console.log(chats[chatId])
-
-        return (
-
-            <div className="msg-wrapper">
-                <div>
-                    { MessageArr }
-                </div>
-                <div style={ { width: '100%', display: 'flex' }}>
-                   <TextField 
-                        name = "input"
-                        ref = {this.textInput}
-                        fullWidth = {true}
-                        style={ { fontSize: '22px' } }
-                        hintText = "Enter message"
-                        onChange = {this.handleInput}
-                        value={this.state.input}
-                        onKeyUp={ this.handleKeyUp }
-                    /> 
-                </div>
-                
-                <FloatingActionButton onClick={ () => this.handleSendMessage() }>
+        return [
+            <div key='message-field' className="message-field">
+                { messageElements }
+            </div>,
+            <div key='text-field' style={ { width: '100%', display: 'flex' } }>
+                <TextField
+                    name="input"
+                    fullWidth={ true }
+                    hintText="Введите сообщение"
+                    style={ { fontSize: '22px' } }
+                    onChange={ this.handleChange }
+                    value={ this.state.input }
+                    onKeyUp={ (event) => this.handleKeyUp(event, this.state.input) }
+                />
+                <FloatingActionButton onClick={ () => this.handleSendMessage(this.state.input, 'it') }>
                     <SendIcon />
                 </FloatingActionButton>
             </div>
-        )
+        ]
     }
 }
 
-let mapStateToProps = ({ messagesReducer }) => ({
-    messages: messagesReducer.messages
-})
+const mapStateToProps = ({ chatReducer, messageReducer }) => ({
+    chats: chatReducer.chats,
+    messages: messageReducer.messages,
+});
 
-let mapDispatchToProps = dispatch => bindActionCreators ({ sendMessage }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage }, dispatch);
 
-export default connect (mapStateToProps, mapDispatchToProps) (Messages)
+export default connect(mapStateToProps, mapDispatchToProps)(MessageField);
