@@ -7,11 +7,11 @@ let Styles = makeStyles (theme => ({
         flexDirection: 'column',
         maxWidth: '60%',
         background: props =>
-        props.msg.user == props.user.name 
+        props.user && props.msg.user == props.user.name 
         ? theme.palette.primary.main
         : theme.palette.warning.light,
         color: props =>
-        props.msg.user == props.user.name
+        props.user && props.msg.user == props.user.name
         ? theme.palette.primary.contrastText
         : theme.palette.warning.contrastText,
         columnGap: theme.spacing(2),
@@ -19,7 +19,7 @@ let Styles = makeStyles (theme => ({
      },
      userMessage: {
         alignSelf: props => 
-        props.msg.user == props.user.name
+        props.user && props.msg.user == props.user.name
         ? 'flex-end'
         : 'flex-start', 
         '&:first-child': {

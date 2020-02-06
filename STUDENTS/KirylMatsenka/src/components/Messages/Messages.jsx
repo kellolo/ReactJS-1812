@@ -8,7 +8,8 @@ import Box from '@material-ui/core/Box'
 import ScrollBottom from './ScrollBottom.jsx'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 
-import { sendMessage } from '../../actions/message_actions.js'
+
+import { sendMessage, loadMessages } from '../../actions/message_actions.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -24,17 +25,8 @@ class Messages extends Component {
         }
     }
 
-    async componentWillMount () {
-        try {
-            await fetch ('https://raw.githubusercontent.com/KirylJazzSax/api/master/messages.json')
-            .then (data => data.json ())
-            .then (json => {
-                this.setState ({ messages: json })
-            })
-        } 
-        finally {
-            console.log ('Messages loaded')
-        }
+    componentWillMount () {
+        this.props.loadMessages (this.props.chat)
     }
 
     componentDidMount () {
@@ -49,6 +41,26 @@ class Messages extends Component {
         if (this.getLastMessageInField ()) {
             this.getLastMessageInField ().scrollIntoView ({ behavior: 'smooth', block: 'center' })
         }
+    }
+
+    getMessages () {
+        let messages
+        if (this.props.messages[this.props.chat]) {
+            let m = this.props.messages[this.props.chat]
+            messages = Object.keys (m).map (id => 
+                <Box
+                    key={ id } 
+                    display="flex" 
+                    justifyContent={ m[id].user == this.props.user.name ? "flex-end" : "flex-start" }
+                    m={2}
+                >
+                    <Message msg={ m[id] } user={ this.props.user }/>
+                </Box>
+                )
+                return messages
+        } 
+
+        return <Box><Message msg={ {body: 'No messages', user:  'some' } } /></Box>
     }
 
     // Достаем последний элемент в диалоге
@@ -75,22 +87,6 @@ class Messages extends Component {
     }
 
     render () {
-        let messages
-        if (this.state.messages !== null) {
-            let m = this.state.messages[this.props.chat]
-            messages = Object.keys (m).map (id => 
-            <Box
-                key={ id } 
-                display="flex" 
-                justifyContent={ m[id].user == this.props.user.name ? "flex-end" : "flex-start" }
-                m={2}
-            >
-                <Message msg={ m[id] } user={ this.props.user }/>
-            </Box>
-            )
-        }
-        
-    
         return (
             <Grid container item xs={9} alignContent={'flex-end'}>
                 <Box 
@@ -101,7 +97,7 @@ class Messages extends Component {
                     overflow="auto" 
                     alignSelf={'flex-end'}
                 >
-                    { messages }
+                    { this.getMessages () }
                     <ScrollBottom scrollElement={this.state.scrollElement}>
                         <Fab color="secondary" size="small" aria-label="scroll back to top">
                             <KeyboardArrowDownIcon />
@@ -141,6 +137,6 @@ let mapStateToProps = ({ chatReducer, messageReducer }) => ({
     messages: messageReducer.messages
 })
 
-let mapDispatchToProps = dispatch => bindActionCreators ({ sendMessage }, dispatch)
+let mapDispatchToProps = dispatch => bindActionCreators ({ sendMessage, loadMessages }, dispatch)
 
 export default connect (mapStateToProps, mapDispatchToProps) (Messages)
