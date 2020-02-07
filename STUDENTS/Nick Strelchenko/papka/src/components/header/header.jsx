@@ -1,28 +1,14 @@
 import React from 'react'
-
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
-import './header.css'
-import { connect } from 'react-redux';
-
 class Header extends React.Component{
-    
     render(){
-        
         return(
-            
-                <Row className='justify-content-around mt-5'style={{borderBottom:"2p solid gray"}}>
-                    <Col md={5} className="header text-primary">
-                        Привет User твой чат активен
-                    </Col>
-                </Row>
+            <React.Fragment>
+                <div className="w-100 text-center bg-primary p-1 text-white" >
+                    <h2>Здравствуй User твой чат активен!</h2>
+                </div>
+            </React.Fragment>
             
         )
     }
 }
-
-const mapStateToProps=(state)=>{
-    return ({state})
-}
-
-export default connect(mapStateToProps)(Header)
+export default Header

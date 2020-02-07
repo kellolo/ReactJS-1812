@@ -4,12 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel='stylesheet' href='style.css'>
-    <title>Document</title>
+    <title>Huangchao Restaurant</title>
+    <link rel="manifest" href="https://kyorkis.github.io/chat_pwa/manifest/manifest.json">
+    <script src="https://kit.fontawesome.com/060c5b7f42.js" crossorigin="anonymous"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
-
-    <div id ='root'></div>
-
-<script type="text/javascript" src="bundle.js"></script></body>
+    <div id="root"></div>
+<script>
+   if ('serviceWorker' in navigator) {
+       window.addEventListener('load', function() {
+           navigator.serviceWorker.register('https://kyorkis.github.io/chat_pwa/service-worker.js').then(function(registration) {
+               // Registration was successful
+               console.log('ServiceWorker успешно зарегистрирован со сферой действия: ', registration.scope);
+               }, function(err) {
+               // registration failed :(
+               console.log('ServiceWorker не удалось зарегистрировать: ', err);
+           }).catch(function(err) {
+               console.log(err)
+           });
+       });
+   } else {
+       console.log('ServiceWorker не поддерживается');
+   }
+</script>
+</body>
 </html>
