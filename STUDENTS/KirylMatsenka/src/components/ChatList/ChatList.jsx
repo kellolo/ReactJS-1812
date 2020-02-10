@@ -7,7 +7,7 @@ import { push } from 'connected-react-router'
 import PropTypes from 'prop-types'
 
 
-import { addChat } from '../../actions/chat_actions.js'
+import { addChat, loadChats } from '../../actions/chat_actions.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -32,17 +32,8 @@ class ChatList extends Component {
         this.props.addChat ()
     }
 
-    async componentWillMount () {
-        try {
-            await fetch ('https://raw.githubusercontent.com/KirylJazzSax/api/master/chats.json')
-            .then (data => data.json ())
-            .then (json => {
-                this.setState ({ chats: json })
-            })
-        }
-        finally {
-            console.log ('Chats loaded')
-        }   
+    componentDidMount () {
+        this.props.loadChats ()
     }
 
     render () {
@@ -64,6 +55,6 @@ let mapStateToProps = ({ chatReducer }) => ({
     chats: chatReducer.chats
 })
 
-let mapDispatchToProps = dispatch => bindActionCreators ({ addChat, push }, dispatch)
+let mapDispatchToProps = dispatch => bindActionCreators ({ addChat, loadChats, push }, dispatch)
 
 export default connect (mapStateToProps, mapDispatchToProps) (ChatList)

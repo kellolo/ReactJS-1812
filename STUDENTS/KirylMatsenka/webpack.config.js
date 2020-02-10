@@ -1,13 +1,14 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const cop = require('copy-webpack-plugin');
 
 module.exports = {
   entry: path.resolve (__dirname, 'src', 'index.jsx'),
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: path.join('js', 'bundle.js'),
-    publicPath: '/'
+    publicPath: '/',
   },
   mode: 'development',
   devServer: {
@@ -56,6 +57,20 @@ module.exports = {
     new HtmlWebpackPlugin({
         filename: 'index.html',
         template: path.resolve('src', 'index.html')
-    })
+    }),
+    new cop ([
+      {
+        from: path.resolve (__dirname, 'api'),
+        to: 'api/[name].[ext]',
+      },
+      {
+        from: path.resolve (__dirname, 'manifest'),
+        to: 'manifest/[name].[ext]'
+      },
+      {
+        from: path.resolve (__dirname, 'service-worker.js'),
+        to: 'service-worker.js'
+      }
+    ])
   ]
 }
