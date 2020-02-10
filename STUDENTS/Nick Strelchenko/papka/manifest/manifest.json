@@ -1,0 +1,22 @@
+{
+    "short_name": "Chat",
+    "name": "React App Chat",
+    "icons": [
+      {
+        "src":"https://kyorkis.github.io/chat_pwa/manifest/icon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src":"https://kyorkis.github.io/chat_pwa/manifest/icon-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "start_url": "https://kyorkis.github.io/chat_pwa/",
+    "background_color": "#7ACCE5",
+    "theme_color": "#7ACCE5",
+    "orientation": "any",
+    "display": "standalone"
+   }
+   

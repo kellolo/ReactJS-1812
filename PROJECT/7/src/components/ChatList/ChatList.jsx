@@ -58,6 +58,7 @@ class ChatList extends React.Component {
                        onKeyUp={ this.handleKeyUp }
                    />}
                />
+               <img src="https://kyorkis.pythonanywhere.com/static/img/gemopunctura.jpg"/>
             </List>
         )
     }

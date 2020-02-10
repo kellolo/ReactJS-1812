@@ -1,0 +1,43 @@
+{
+    "chatlist":{
+        "1":{
+            "chatName":"First chat",
+            "messages":{
+                "1":{
+                    "name":"User",
+                    "text":"Привет"
+                },
+                "2":{
+                    "name":"Robot",
+                    "text":"И тебе привет от Робота"
+                }
+            }
+        },
+        "2":{
+            "chatName":"Second chat",
+            "messages":{
+                "1":{
+                    "name":"User",
+                    "text":"Здравствуй робот"
+                },
+                "2":{
+                    "name":"Robot",
+                    "text":"И тебе не хворать человек!"
+                }
+            }
+        },
+        "3":{
+            "chatName":"Third chat",
+            "messages":{
+                "1":{
+                    "name":"User",
+                    "text":"Добрый день"
+                },
+                "2":{
+                    "name":"Robot",
+                    "text":"И вам, чем могу помочь?"
+                }
+            }
+        }
+    }
+}

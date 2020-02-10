@@ -3,15 +3,15 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-    entry: './src/index.jsx',
+    entry: ['@babel/polyfill','./src/index.jsx'],
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'js/main.js'
     },
     mode: 'development',
     devServer: {
-        contentBase: './dist',
-        port: 9000,
+        // contentBase: './dist',
+        port: 3000,
         hot: true,
         historyApiFallback: {
             index: './src/index.html'
